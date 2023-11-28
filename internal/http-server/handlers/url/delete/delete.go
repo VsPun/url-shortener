@@ -43,5 +43,7 @@ func New(log *slog.Logger, urlGetter URLRemover) http.HandlerFunc {
 		}
 
 		log.Info("delete URL by alias", slog.String("alias", alias))
+
+		render.JSON(w, r, response.OK())
 	}
 }
