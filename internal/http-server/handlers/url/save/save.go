@@ -4,7 +4,6 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
-	"url-shortener/internal/config"
 	"url-shortener/internal/lib/api/response"
 	"url-shortener/internal/lib/logger/sl"
 	"url-shortener/internal/lib/random"
@@ -29,7 +28,7 @@ type URLSaver interface {
 	SaveURL(urlToSave string, alias string) error
 }
 
-func New(log *slog.Logger, urlSaver URLSaver, cfg config.Config) http.HandlerFunc {
+func New(log *slog.Logger, urlSaver URLSaver, aliasLength int) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		const op = "handlers.url.save.New"
 
@@ -63,7 +62,7 @@ func New(log *slog.Logger, urlSaver URLSaver, cfg config.Config) http.HandlerFun
 
 		alias := req.Alias
 		if alias == "" {
-			alias = random.NewRandomString(cfg.AliasLength)
+			alias = random.NewRandomString(aliasLength)
 		}
 
 		err = urlSaver.SaveURL(req.URL, alias)

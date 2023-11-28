@@ -41,7 +41,7 @@ func main() {
 	router.Use(mwLogger.New(log))
 	router.Use(middleware.Recoverer)
 	router.Use(middleware.URLFormat)
-	router.Post("/url", save.New(log, storage, *cfg))
+	router.Post("/url", save.New(log, storage, cfg.AliasLength))
 
 	log.Info("starting server", slog.String("address", cfg.Address))
 
