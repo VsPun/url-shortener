@@ -71,6 +71,8 @@ func New(log *slog.Logger, urlSaver URLSaver, aliasLength int) http.HandlerFunc 
 				log.Info("URL already exists", slog.String("url", req.URL))
 
 				render.JSON(w, r, response.Error("URL already exists"))
+
+				return
 			}
 
 			log.Error("failed to add URL", sl.Err(err))
