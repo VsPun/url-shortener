@@ -1,5 +1,5 @@
 env: "prod"
-storage_path: "./storage/storage.db"
+storage_path: "./storage.db"
 alias_length: 8
 http_server:
   address: "0.0.0.0:8082"
