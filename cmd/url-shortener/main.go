@@ -1,9 +1,11 @@
 package main
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"os"
+	ssogrpc "url-shortener/internal/clients/sso/grpc"
 	"url-shortener/internal/config"
 	"url-shortener/internal/http-server/handlers/redirect"
 	"url-shortener/internal/http-server/handlers/url/delete"
@@ -31,6 +33,18 @@ func main() {
 	log.Info("Start url-shortener", slog.String("env", cfg.Env))
 	log.Debug("Debug messages are enabled")
 	log.Debug(cfg.StoragePath)
+
+	_, err := ssogrpc.New(
+		context.Background(),
+		log,
+		cfg.Clients.SSO.Address,
+		cfg.Clients.SSO.Timeout,
+		cfg.Clients.SSO.RetriesCount,
+	)
+	if err != nil {
+		log.Error("failed to init sso client", sl.Err(err))
+		os.Exit(1)
+	}
 
 	storage, err := sqlite.New(cfg.StoragePath)
 	if err != nil {
